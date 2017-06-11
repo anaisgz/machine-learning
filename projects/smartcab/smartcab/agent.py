@@ -90,6 +90,7 @@ class LearningAgent(Agent):
         possible_actions = self.Q[state]
 
         maxQ = max(possible_actions.items(), key=lambda x: x[1])[1]
+        #maxQ = max(self.Q[state].values())
 
         return maxQ 
 
@@ -103,14 +104,17 @@ class LearningAgent(Agent):
         # When learning, check if the 'state' is not in the Q-table
         # If it is not, create a new dictionary for that state
         #   Then, for each action available, set the initial Q-value to 0.0
+
         if self.learning:
             if not self.Q.has_key(state):
                 valid_actions = Environment.valid_actions
                 action_scores = dict(zip(valid_actions, [0.0]*len(valid_actions)))
                 self.Q[state] = action_scores
+        
 
-        return
-
+        
+        return 
+        
 
     def choose_action(self, state):
         """ The choose_action function is called when the agent is asked to choose
@@ -127,13 +131,17 @@ class LearningAgent(Agent):
         # When not learning, choose a random action
         # When learning, choose a random action with 'epsilon' probability
         #   Otherwise, choose an action with the highest Q-value for the current state
-        possible_actions = self.Q[state]
-        action_with_max_Q = max(possible_actions.items(), key=lambda x: x[1])[0]
+#        possible_actions = self.Q[state]
+ #       action_with_max_Q = max(possible_actions.items(), key=lambda x: x[1])[0]
+
+
         if self.learning:
+            possible_actions = self.Q[state]
+            action_with_max_Q = max(possible_actions.items(), key=lambda x: x[1])[0]
+
             choose_using_epsilon  = random.random() < 1 - self.epsilon
             if not choose_using_epsilon:
-                valid_actions = filter(lambda x: x != action_with_max_Q, 
-                    Environment.valid_actions)
+                valid_actions = filter(lambda x: x != action_with_max_Q, Environment.valid_actions)
                 action = random.choice(valid_actions)
             else:
                 action = action_with_max_Q
@@ -152,8 +160,8 @@ class LearningAgent(Agent):
         ###########
         # When learning, implement the value iteration update rule
         #   Use only the learning rate 'alpha' (do not use the discount factor 'gamma')
-
-        self.Q[state][action] = (self.Q[state][action] * (1- self.alpha)) + (reward * self.alpha)
+        if self.learning:
+            self.Q[state][action] = (self.Q[state][action] * (1- self.alpha)) + (reward * self.alpha)
         return
 
 
@@ -189,7 +197,8 @@ def run():
     #   learning   - set to True to force the driving agent to use Q-learning
     #    * epsilon - continuous value for the exploration factor, default is 1
     #    * alpha   - continuous value for the learning rate, default is 0.5
-    agent = env.create_agent(LearningAgent, learning = True, alpha = 0.5)
+    learning = False
+    agent = env.create_agent(LearningAgent, learning = learning, alpha = 0.5)
     
     ##############
     # Follow the driving agent
@@ -207,7 +216,7 @@ def run():
     #   optimized    - set to True to change the default log file name
     update_delay = 0.0001
     log_metrics = True
-    optimized = True
+    optimized = False
     sim = Simulator(env,update_delay=update_delay, log_metrics=log_metrics, optimized = optimized,  display=False)
     
     ##############
