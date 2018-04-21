@@ -13698,6 +13698,22 @@ None
 </div>
 </div>
 </div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Possible improvements I could make for my algorithm:</p>
+<ul>
+<li>Add image augmentation. </li>
+<li>We could use the existing dataset and perform for example, a perspective transform that I think I could also transform the network into a Generative Adversarial Network (GAN). </li>
+<li>Moreover, we could add a generator to the network which would try to trick the discriminator with fake images of dogs. In this way, the network could get better at detecting the classes of real images by effectively getting more (fake) training samples.</li>
+<li>We also could change the activation functions to something a little more robust (like  leaky relu) or even add batch normalization to the network.</li>
+<li>Finally, we can add the bounding boxes of the detected faces (and detected dog) so that each pixel in the image is as close to a feature of the dog (or face) as possible.</li>
+</ul>
+
+</div>
+</div>
+</div>
     </div>
   </div>
 </body>
